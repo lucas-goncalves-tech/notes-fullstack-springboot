@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "users")
@@ -33,8 +34,9 @@ public class User {
   @Column(nullable = false)
   private String passwordHash;
 
+  @CreatedDate
   @Column(nullable = false, updatable = false)
-  private LocalDateTime createdAt = LocalDateTime.now();
+  private LocalDateTime createdAt;
 
   public User(String email, String username, String passwordHash) {
     this.email = email;
