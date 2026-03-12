@@ -1,8 +1,9 @@
 package com.notesapi.notes_api.auth.dtos;
 
+import com.notesapi.notes_api.user.dto.UserResponse;
+
 public record RegisterResponse(
         String message,
-        UserDetails data
+        UserResponse data
 ) {
-    public record UserDetails (String email, String username){}
 }

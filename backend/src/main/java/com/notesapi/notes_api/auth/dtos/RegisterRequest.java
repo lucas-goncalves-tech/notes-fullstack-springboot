@@ -22,11 +22,10 @@ public record RegisterRequest(
         @NotBlank(message = "Confirmação de senha é obrigatório")
         @Size(min = 8, message = "Confirmação de senha deve ter no minimo 8 caracteres")
         String confirmPassword
-        ) {
+) {
 
     public RegisterRequest {
-        if(!email.isEmpty()){
-            email = email.trim().toLowerCase();
-        }
+        email = email != null ? email.trim().toLowerCase() : null;
+        username = username != null ? username.trim() : null;
     }
 }
