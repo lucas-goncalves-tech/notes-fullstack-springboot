@@ -1,5 +1,6 @@
 package com.notesapi.notes_api.note.entities;
 
+import com.notesapi.notes_api.user.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,17 +22,17 @@ public class Note {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false, length = 50)
-    String title;
+    private String title;
 
     @Column(nullable = false, length = 255)
-    String description;
+    private String content;
 
     @Column(nullable = false)
-    boolean completed;
+    private boolean completed = false;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
