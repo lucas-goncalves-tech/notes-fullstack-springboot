@@ -1,4 +1,4 @@
-package com.notesapi.notes_api.user.entity;
+package com.notesapi.notes_api.user.entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,16 +9,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
   @Id
@@ -34,13 +34,7 @@ public class User {
   @Column(nullable = false)
   private String passwordHash;
 
-  @CreatedDate
-  @Column(nullable = false, updatable = false)
+  @CreationTimestamp
+  @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
-
-  public User(String email, String username, String passwordHash) {
-    this.email = email;
-    this.username = username;
-    this.passwordHash = passwordHash;
-  }
 }
