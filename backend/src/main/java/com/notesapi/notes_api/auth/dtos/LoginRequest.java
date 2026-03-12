@@ -16,9 +16,7 @@ public record LoginRequest(
         String password
 ) {
     public LoginRequest {
-        if(!email().isEmpty()){
-            email = email.trim().toLowerCase();
-        }
+        email = email != null ? email.trim().toLowerCase() : null;
     }
 
 }

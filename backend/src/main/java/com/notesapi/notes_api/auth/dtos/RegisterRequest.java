@@ -14,7 +14,7 @@ public record RegisterRequest(
 
         @NotBlank(message = "Nome é obrigatorio")
         @Size(min = 3, message = "Nome precisa ter no mínimo 3 caracteres")
-        String username,
+        String displayName,
 
         @NotBlank(message = "Senha é obrigatório")
         @Size(min = 8, message = "Senha deve ter no minimo 8 caracteres")
@@ -26,6 +26,6 @@ public record RegisterRequest(
 
     public RegisterRequest {
         email = email != null ? email.trim().toLowerCase() : null;
-        username = username != null ? username.trim() : null;
+        displayName = displayName != null ? displayName.trim() : null;
     }
 }
