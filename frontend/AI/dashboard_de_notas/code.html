@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>NoteMaster Dashboard</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex flex-col min-h-screen">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-900 text-2xl">sticky_note_2</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">NoteMaster</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-semibold leading-none">Alex Rivera</p>
+<p class="text-xs text-slate-500 mt-1">Pro Plan</p>
+</div>
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/30 overflow-hidden">
+<img alt="Profile" class="size-full object-cover" data-alt="User profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQNWoYX4fUsIi71wTYX_CXdBZv9SyvZASHSnT7vU1nwDZPHQhIrh1OiVMcLI8rMZKE3uYJMmvqLJXa-g0mkp_tud-o2aMhJC-0cxgd7Ddf896ZOV8x7E69qOzDbIdLRgW5_IPIkCrUVZi-U8XfxyW7rumHghtKx9auwqcsxvZFxdSqupI0vw1wi6oJHvaYa0to_y4FzinDeQY4Trw24iKNtMJTT6sx5k6JsWTy2NmNyIddjJ0ziffNkF2SGOw8qYrPXncpLaD2usaI"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+<!-- Search and Actions -->
+<div class="flex flex-col md:flex-row gap-4 mb-8">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Search your notes, tags, or content..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-slate-900 font-bold px-6 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add New Note
+                </button>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-5 py-2 rounded-full bg-primary text-slate-900 font-semibold text-sm">All Notes</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm hover:border-primary transition-colors">In Progress</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm hover:border-primary transition-colors">Completed</button>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-2"></div>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm hover:border-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter
+                </button>
+</div>
+<!-- Notes Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+<!-- Card 1 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="mb-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                            In Progress
+                        </span>
+</div>
+<h3 class="text-lg font-bold mb-2 group-hover:text-primary transition-colors">Project Ideas 2024</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3 mb-6 flex-1">
+                        Brainstorming sessions for the new mobile app design. Focus on dark mode, accessibility, and high performance components.
+                    </p>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Updated 2h ago</span>
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200"></div>
+</div>
+</div>
+</div>
+<!-- Card 2 (Completed) -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="mb-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
+                            Completed
+                        </span>
+</div>
+<h3 class="text-lg font-bold mb-2 line-through text-slate-400">Grocery List</h3>
+<p class="text-slate-400 dark:text-slate-500 text-sm line-clamp-3 mb-6 flex-1 italic">
+                        Milk, Eggs, Bread, Organic Spinach, and those new protein bars everyone is talking about.
+                    </p>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Yesterday</span>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="mb-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                            In Progress
+                        </span>
+</div>
+<h3 class="text-lg font-bold mb-2 group-hover:text-primary transition-colors">Meeting Notes: Q4 Strategy</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3 mb-6 flex-1">
+                        Key takeaways from the strategy meeting. Expansion into European markets and increasing the user retention by 15%.
+                    </p>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">3 days ago</span>
+<span class="material-symbols-outlined text-slate-300">more_horiz</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="mb-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                            In Progress
+                        </span>
+</div>
+<h3 class="text-lg font-bold mb-2 group-hover:text-primary transition-colors">Book Summary: Deep Work</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-3 mb-6 flex-1">
+                        Key takeaways from Cal Newport's book. The concept of shallow work vs deep work and how to schedule focus blocks.
+                    </p>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Aug 24, 2024</span>
+<span class="material-symbols-outlined text-slate-300">description</span>
+</div>
+</div>
+<!-- Card 5 (Completed) -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col h-full relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="mb-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
+                            Completed
+                        </span>
+</div>
+<h3 class="text-lg font-bold mb-2 line-through text-slate-400">Workout Routine</h3>
+<p class="text-slate-400 dark:text-slate-500 text-sm line-clamp-3 mb-6 flex-1 italic">
+                        Monday: Chest &amp; Back. Tuesday: Legs. Wednesday: Cardio &amp; Core. Focus on high reps and low rest intervals.
+                    </p>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+<span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Last week</span>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+</div>
+<!-- Empty Add Card -->
+<button class="group bg-slate-100/50 dark:bg-slate-900/50 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-primary/50 hover:bg-primary/5 transition-all flex flex-col items-center justify-center gap-3 min-h-[200px]">
+<div class="size-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-primary shadow-sm transition-colors">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<p class="font-semibold text-slate-500 dark:text-slate-400 group-hover:text-primary">Create New Note</p>
+</button>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-6">
+<p class="text-sm text-slate-500">Showing <span class="font-semibold text-slate-900 dark:text-slate-100">5</span> of <span class="font-semibold text-slate-900 dark:text-slate-100">24</span> notes</p>
+<nav class="flex items-center gap-1">
+<button class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="size-10 rounded-lg bg-primary text-slate-900 font-bold">1</button>
+<button class="size-10 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">2</button>
+<button class="size-10 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="size-10 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">6</button>
+<button class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</nav>
+</div>
+</main>
+<footer class="mt-auto py-8 text-center text-slate-400 text-xs tracking-widest uppercase border-t border-slate-200 dark:border-slate-800">
+            © 2024 NoteMaster • Your Productivity Partner
+        </footer>
+</div>
+</body></html>
