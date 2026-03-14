@@ -5,10 +5,11 @@ import com.notesapi.notes_api.note.dtos.*;
 import com.notesapi.notes_api.note.entities.Note;
 import com.notesapi.notes_api.user.entities.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,11 +18,17 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
 
-    public List<NoteResponse> findAll(User user) {
-        return noteRepository.findAllByUser(user)
-                .stream()
-                .map(NoteResponse::fromEntity)
-                .toList();
+    public Page<NoteResponse> findAll(User user, String title, Pageable pageable) {
+        Page<Note> notePage;
+        String titleExists = title != null ? title.trim() : null;
+
+        if (titleExists != null) {
+            notePage = noteRepository.findAllByUserAndTitleContainingIgnoreCase(user, titleExists, pageable);
+        } else {
+            notePage = noteRepository.findAllByUser(user, pageable);
+        }
+
+        return notePage.map(NoteResponse::fromEntity);
     }
 
     public CreateNoteResponse create(CreateNoteRequest data, User user) {

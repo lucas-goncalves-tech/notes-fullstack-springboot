@@ -4,12 +4,15 @@ import com.notesapi.notes_api.note.dtos.*;
 import com.notesapi.notes_api.user.entities.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,8 +23,10 @@ public class NoteController {
     private final NoteService noteService;
 
     @GetMapping
-    public ResponseEntity<List<NoteResponse>> findAll(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(noteService.findAll(user));
+    public ResponseEntity<Page<NoteResponse>> findAll(@AuthenticationPrincipal User user,
+                                                      @RequestParam(required = false) String title,
+                                                      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(noteService.findAll(user, title, pageable));
     }
 
     @PostMapping
