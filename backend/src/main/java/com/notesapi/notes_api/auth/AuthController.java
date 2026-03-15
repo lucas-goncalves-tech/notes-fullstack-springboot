@@ -7,6 +7,8 @@ import com.notesapi.notes_api.auth.dtos.RegisterResponse;
 import com.notesapi.notes_api.auth.security.TokenService;
 import com.notesapi.notes_api.user.UserService;
 import com.notesapi.notes_api.user.entities.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -29,6 +32,7 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/register")
+    @Operation(summary = "Cadastra uma novo usuário")
     ResponseEntity<RegisterResponse> create(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -36,6 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Faz login com credenciais")
     ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         var emailPassword = new UsernamePasswordAuthenticationToken(request.email(), request.password());
         Authentication auth = this.authenticationManager.authenticate(emailPassword);
