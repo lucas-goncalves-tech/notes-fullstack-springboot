@@ -44,7 +44,7 @@ public class SpringSecurity {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthEntryPoint))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/scalar/**", "/scalar.js").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/api-docs/**", "/scalar.js").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
