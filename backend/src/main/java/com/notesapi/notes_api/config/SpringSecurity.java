@@ -1,6 +1,6 @@
 package com.notesapi.notes_api.config;
 
-import com.notesapi.notes_api.auth.SecurityFilter;
+import com.notesapi.notes_api.auth.security.SecurityFilter;
 import com.notesapi.notes_api.exceptions.CustomAuthEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +32,7 @@ public class SpringSecurity {
     private final SecurityFilter securityFilter;
     private final CustomAuthEntryPoint customAuthEntryPoint;
 
-    @Value("cors.allowed.origins:http://localhost:3000/")
+    @Value("${cors.allowed-origins:http://localhost:3000}")
     private List<String> allowedOrigins;
 
     @Bean
@@ -42,7 +42,7 @@ public class SpringSecurity {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthEntryPoint))
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/scalar/**", "/scalar.js").permitAll()
                         .anyRequest().authenticated())
@@ -64,8 +64,9 @@ public class SpringSecurity {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedMethods(allowedOrigins);
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

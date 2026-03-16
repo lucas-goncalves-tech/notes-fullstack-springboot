@@ -1,6 +1,5 @@
-package com.notesapi.notes_api.auth;
+package com.notesapi.notes_api.auth.security;
 
-import com.notesapi.notes_api.auth.security.TokenService;
 import com.notesapi.notes_api.user.UserRepository;
 import com.notesapi.notes_api.user.entities.User;
 import jakarta.servlet.FilterChain;
@@ -27,7 +26,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = getToken(request);
 
         if (token != null) {
-            String email = tokenService.validate(token);
+            String email = tokenService.validate(token, TokenService.TokenType.ACCESS);
 
             if (!email.isEmpty()) {
                 User user = userRepository.findByEmail(email).orElseThrow();
