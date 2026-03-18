@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,7 +35,7 @@ public class UserServiceTest {
     class CreateMethod {
         @Test
         @DisplayName("Should throw ConflictException when email already exists")
-        void create_ShouldThrowConflictException_WhenEmailAlreadyExists() {
+        void shouldThrowConflictException_WhenEmailAlreadyExists() {
             String existEmail = "test@test.com";
             RegisterRequest registerRequest = new RegisterRequest(existEmail, "username", "password123", "password123");
 
@@ -48,7 +49,7 @@ public class UserServiceTest {
 
         @Test
         @DisplayName("Should create a new user when email nonexists")
-        void create_ShouldCreateNewUser_WhenEmailNonExists() {
+        void shouldCreateNewUser_WhenEmailNonExists() {
             String newEmail = "test@test.com";
             String password = "password123123";
             String encodedPass = "encoded_pass";
@@ -73,6 +74,14 @@ public class UserServiceTest {
             verify(passwordEncoder).encode(request.password());
             verify(userRepository).existsByEmail(request.email());
             verify(userRepository).save(any(User.class));
+
+            var captor = ArgumentCaptor.forClass(User.class);
+            verify(userRepository).save(captor.capture());
+
+            var capturedSaveduser = captor.getValue();
+            assertEquals(encodedPass, capturedSaveduser.getPassword());
         }
     }
+
+
 }
