@@ -31,15 +31,15 @@ public class AuthService {
     public AuthTokens refresh(String refreshtoken) {
         String exceptionMessage = "Refresh token inválido ou inexistente";
         if (refreshtoken == null || refreshtoken.isEmpty()) {
-            throw new UnauthorizedException("Validação de existencia");
+            throw new UnauthorizedException(exceptionMessage);
         }
         String email = tokenService.validate(refreshtoken, TokenService.TokenType.REFRESH);
 
         if (email == null || email.isBlank()) {
-            throw new UnauthorizedException("Validação de token");
+            throw new UnauthorizedException(exceptionMessage);
         }
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UnauthorizedException("Validação de usuario"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UnauthorizedException(exceptionMessage));
 
         String newAccessToken = tokenService.generateAccess(user);
         String currentRefreshToken = refreshtoken;
