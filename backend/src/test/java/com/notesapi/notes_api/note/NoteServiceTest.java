@@ -37,9 +37,8 @@ public class NoteServiceTest {
     NoteService noteService;
 
     @Nested
-    @DisplayName("Method: create()")
-    class createMethod {
-
+    @DisplayName("Method: findAll()")
+    class findAllMethod {
         @Test
         @DisplayName("Should return all notes from user")
         void shouldReturnAllNotesFromUser() {
@@ -80,6 +79,11 @@ public class NoteServiceTest {
             verify(noteRepository).findAllByUserAndTitleContainingIgnoreCase(mockUser, title, pageable);
             verify(noteRepository, never()).findAllByUser(any(User.class), any(Pageable.class));
         }
+    }
+
+    @Nested
+    @DisplayName("Method: create()")
+    class createMethod {
 
         @Test
         @DisplayName("Should create new note when data is valid")
