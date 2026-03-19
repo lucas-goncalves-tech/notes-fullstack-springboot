@@ -28,7 +28,7 @@ public class Note {
     @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)

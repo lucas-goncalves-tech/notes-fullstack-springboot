@@ -22,7 +22,7 @@ public class NoteService {
         Page<Note> notePage;
         String titleExists = title != null ? title.trim() : null;
 
-        if (titleExists != null) {
+        if (titleExists != null && !titleExists.isEmpty()) {
             notePage = noteRepository.findAllByUserAndTitleContainingIgnoreCase(user, titleExists, pageable);
         } else {
             notePage = noteRepository.findAllByUser(user, pageable);
