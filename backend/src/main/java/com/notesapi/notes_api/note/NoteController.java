@@ -30,10 +30,11 @@ public class NoteController {
 
     @GetMapping
     @Operation(summary = "Lista todas as notas")
-    public ResponseEntity<Page<NoteResponse>> findAll(@AuthenticationPrincipal User user,
-                                                      @RequestParam(required = false) String title,
-                                                      @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(noteService.findAll(user, title, pageable));
+    public ResponseEntity<PageNoteResponse> findAll(@AuthenticationPrincipal User user,
+                                                    @RequestParam(required = false) String title,
+                                                    @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable) {
+        Page<NoteResponse> responsePage = noteService.findAll(user, title, pageable);
+        return ResponseEntity.ok(PageNoteResponse.fromPageable(responsePage));
     }
 
     @PostMapping
