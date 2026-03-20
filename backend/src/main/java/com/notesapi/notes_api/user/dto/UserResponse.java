@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public record UserResponse(
         String email,
-        String username,
+        String displayName,
         LocalDateTime createdAt
 ) {
     public static UserResponse fromEntity(User user) {
