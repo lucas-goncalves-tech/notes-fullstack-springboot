@@ -28,12 +28,12 @@ public class AuthService {
         return new AuthTokens(tokenService.generateAccess(user), tokenService.generateRefresh(user));
     }
 
-    public AuthTokens refresh(String refreshtoken) {
+    public AuthTokens refresh(String refreshToken) {
         String exceptionMessage = "Refresh token inválido ou inexistente";
-        if (refreshtoken == null || refreshtoken.isEmpty()) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
             throw new UnauthorizedException(exceptionMessage);
         }
-        String email = tokenService.validate(refreshtoken, TokenService.TokenType.REFRESH);
+        String email = tokenService.validate(refreshToken, TokenService.TokenType.REFRESH);
 
         if (email == null || email.isBlank()) {
             throw new UnauthorizedException(exceptionMessage);
@@ -42,9 +42,9 @@ public class AuthService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UnauthorizedException(exceptionMessage));
 
         String newAccessToken = tokenService.generateAccess(user);
-        String currentRefreshToken = refreshtoken;
+        String currentRefreshToken = refreshToken;
 
-        if (tokenService.needsNewRefresh(refreshtoken)) {
+        if (tokenService.needsNewRefresh(refreshToken)) {
             currentRefreshToken = tokenService.generateRefresh(user);
         }
 

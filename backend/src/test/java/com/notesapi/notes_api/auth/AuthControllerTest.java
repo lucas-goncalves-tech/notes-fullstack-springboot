@@ -1,16 +1,21 @@
 package com.notesapi.notes_api.auth;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.notesapi.notes_api.TestUserHelper;
 import com.notesapi.notes_api.auth.dtos.LoginRequest;
 import com.notesapi.notes_api.auth.dtos.RegisterRequest;
+import com.notesapi.notes_api.auth.security.TokenService;
 import com.notesapi.notes_api.user.UserRepository;
 import com.notesapi.notes_api.user.entities.User;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -23,6 +28,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
@@ -54,7 +61,13 @@ public class AuthControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private ObjectMapper objectMapper;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Nested
     @DisplayName("Endpoint: /auth/register")
@@ -122,13 +135,14 @@ public class AuthControllerTest {
     @DisplayName("Endpoint: /auth/login")
     class LoginEndpoint {
 
-        String loginUrl = "/auth/login";
+        final static String loginUrl = "/auth/login";
 
         @Test
         @DisplayName("Should return status 200 with access on body and refresh on cookie when credentials is valid")
         void shouldReturnStatus200WithAccessOnBodyAndRefreshOnCookieWhenCredentialsIsValid() throws Exception {
             User user = new TestUserHelper(userRepository, passwordEncoder).createUser();
-            LoginRequest request = new LoginRequest(user.getEmail(), "123123123"); // default password from TestUserHelper;
+            LoginRequest request = new LoginRequest(user.getEmail(), "123123123"); // default password from
+            // TestUserHelper;
             String jsonRequest = objectMapper.writeValueAsString(request);
             int ttlCookie = 7 * 24 * 60 * 60;
             String refreshTokenName = "refreshToken";
@@ -174,5 +188,86 @@ public class AuthControllerTest {
                     .andExpect(jsonPath("$.message").exists());
         }
 
+    }
+
+    @Nested
+    @DisplayName("Endpoint: /auth/refresh")
+    class RefreshMethod {
+
+        final static String refreshUrl = "/auth/refresh";
+
+
+        @Test
+        @DisplayName("Should return status 200 with new access token when refresh Token is valid")
+        void shouldReturnStatus200WithNewAccessToken_WhenRefreshTokenIsValid() throws Exception {
+            User user = new TestUserHelper(userRepository, passwordEncoder).createUser();
+            String refreshToken = tokenService.generateRefresh(user);
+
+            mockMvc.perform(post(refreshUrl)
+                            .cookie(new Cookie("refreshToken", refreshToken)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.message").exists())
+                    .andExpect(jsonPath("$.token").exists());
+        }
+
+        @Test
+        @DisplayName("Should return status 401 when refresh token is empty")
+        void shouldReturnStatus401_WhenRefreshTokenIsEmpty() throws Exception {
+            mockMvc.perform(post(refreshUrl)
+                            .cookie(new Cookie("refreshToken", " ")))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").exists());
+        }
+
+        @Test
+        @DisplayName("Should return status 401 when refresh token is invalid")
+        void shouldReturnStatus401_WhenRefreshTokenIsInvalid() throws Exception {
+            mockMvc.perform(post(refreshUrl)
+                            .cookie(new Cookie("refreshToken", "invalid-refresh-token")))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").exists());
+        }
+
+        @Test
+        @DisplayName("Should return status 401 when access token is used")
+        void shouldReturnStatus401_WhenAccessTokenIsUsed() throws Exception {
+            User user = new TestUserHelper(userRepository, passwordEncoder).createUser();
+            String accessToken = tokenService.generateAccess(user);
+
+            mockMvc.perform(post(refreshUrl)
+                            .cookie(new Cookie("refreshToken", accessToken)))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").exists());
+        }
+
+        @Test
+        @DisplayName("Should return status 401 when refresh token is valid and user not found")
+        void shouldReturnStatus401_WhenRefreshTokenIsValidAndUserNotFound() throws Exception {
+            User user = User.builder().email("some-invalid@email.com").build();
+            String refreshToken = tokenService.generateRefresh(user);
+
+            mockMvc.perform(post(refreshUrl)
+                            .cookie(new Cookie("refreshToken", refreshToken)))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").exists());
+        }
+
+        @Test
+        @DisplayName("Should return status 401 when refresh token is expired")
+        void shouldReturnStatus401_WhenRefreshTokenIsExpired() throws Exception {
+            User user = new TestUserHelper(userRepository, passwordEncoder).createUser();
+            String refreshToken = JWT.create()
+                    .withIssuer("notes-api")
+                    .withSubject(user.getEmail())
+                    .withClaim("type", TokenService.TokenType.REFRESH.name().toLowerCase())
+                    .withIssuedAt(Instant.now().minus(Duration.ofDays(8)))
+                    .withExpiresAt(Instant.now().minus(Duration.ofHours(3)))
+                    .sign(Algorithm.HMAC256(jwtSecret));
+
+            mockMvc.perform(post(refreshUrl)
+                            .cookie(new Cookie("refreshToken", refreshToken)))
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").exists());
+        }
     }
 }
