@@ -38,7 +38,7 @@ public class NoteService {
                 .user(user)
                 .build();
 
-        Note createdNote = noteRepository.save(newNote);
+        Note createdNote = noteRepository.saveAndFlush(newNote);
 
         return new CreateNoteResponse("Nota %s criada com sucesso".formatted(data.title()),
                 NoteResponse.fromEntity(createdNote));
