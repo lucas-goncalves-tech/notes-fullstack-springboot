@@ -30,12 +30,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -93,9 +92,9 @@ public class AuthControllerTest {
                     .andExpect(jsonPath("$.data.email").value(email))
                     .andExpect(jsonPath("$.data.displayName").value(displayName));
 
-            Optional<User> savedUser = userRepository.findByEmail(email);
-            assertTrue(savedUser.isPresent());
-            assertNotEquals(password, savedUser.get().getPassword());
+            User savedUser = userRepository.findByEmail(email).orElseThrow();
+            assertNotNull(savedUser);
+            assertNotEquals(password, savedUser.getPassword());
         }
 
         @Test
