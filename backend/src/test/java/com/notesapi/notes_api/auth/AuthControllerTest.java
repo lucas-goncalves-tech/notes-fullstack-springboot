@@ -270,4 +270,23 @@ public class AuthControllerTest {
                     .andExpect(jsonPath("$.message").exists());
         }
     }
+
+    @Nested
+    @DisplayName("Endpoint: /auth/logout")
+    class LogoutMethod {
+        final static String logoutUrl = "/auth/logout";
+
+        @Test
+        @DisplayName("Should return status 204 and clear refresh token cookie when refresh token is present")
+        void shouldReturnStatus204AndClearRefreshTokenCookie_WhenRefreshTokenIsPresent() throws Exception {
+            User user = new TestUserHelper(userRepository, passwordEncoder).createUser();
+            String refreshToken = tokenService.generateRefresh(user);
+
+            mockMvc.perform(post(logoutUrl)
+                            .cookie(new Cookie("refreshToken", refreshToken)))
+                    .andExpect(status().isNoContent())
+                    .andExpect(cookie().value("refreshToken", ""))
+                    .andExpect(cookie().maxAge("refreshToken", 0));
+        }
+    }
 }
