@@ -31,7 +31,7 @@ public class NoteController {
     @GetMapping
     @Operation(summary = "Lista todas as notas")
     public ResponseEntity<PageNoteResponse> findAll(@AuthenticationPrincipal User user,
-                                                    @RequestParam(required = false) String title,
+                                                    @RequestParam(value = "title", required = false) String title,
                                                     @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable) {
         Page<NoteResponse> responsePage = noteService.findAll(user, title, pageable);
         return ResponseEntity.ok(PageNoteResponse.fromPageable(responsePage));
@@ -62,7 +62,7 @@ public class NoteController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta uma nota permanentemente")
-    public ResponseEntity<Void> delete(@PathVariable UUID id,
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID id,
                                        @AuthenticationPrincipal User user) {
         noteService.delete(id, user);
         return ResponseEntity.noContent().build();
