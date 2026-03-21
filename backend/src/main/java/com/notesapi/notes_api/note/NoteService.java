@@ -18,6 +18,7 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
 
+    @Transactional(readOnly = true)
     public Page<NoteResponse> findAll(User user, String title, Pageable pageable) {
         Page<Note> notePage;
         String titleExists = title != null ? title.trim() : null;
@@ -46,7 +47,8 @@ public class NoteService {
 
     @Transactional
     public UpdateNoteResponse update(UUID id, UpdateNoteRequest data, User user) {
-        Note note = noteRepository.findByIdAndUser(id, user).orElseThrow(() -> new NotFoundException("Nota não encontrada"));
+        Note note = noteRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new NotFoundException("Nota não encontrada"));
 
         if (data.title() != null && !data.title().isEmpty()) {
             note.setTitle(data.title());
@@ -64,23 +66,25 @@ public class NoteService {
 
     @Transactional
     public ToggleCompletedResponse toggleCompleted(UUID id, User user) {
-        Note note = noteRepository.findByIdAndUser(id, user).orElseThrow(() -> new NotFoundException("Nota não encontrada"));
+        Note note = noteRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new NotFoundException("Nota não encontrada"));
 
         note.setCompleted(!note.isCompleted());
         String completedMessage = note.isCompleted() ? "completada" : "não completada";
 
         Note updatedNote = noteRepository.save(note);
 
-        return new ToggleCompletedResponse("Nota %s atualizada para %s com sucesso".formatted(updatedNote.getTitle(), completedMessage),
+        return new ToggleCompletedResponse(
+                "Nota %s atualizada para %s com sucesso".formatted(updatedNote.getTitle(), completedMessage),
                 NoteResponse.fromEntity(updatedNote));
     }
 
     @Transactional
     public void delete(UUID id, User user) {
-        Note note = noteRepository.findByIdAndUser(id, user).orElseThrow(() -> new NotFoundException("Nota não encontrada"));
+        Note note = noteRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new NotFoundException("Nota não encontrada"));
 
         noteRepository.delete(note);
     }
-
 
 }
