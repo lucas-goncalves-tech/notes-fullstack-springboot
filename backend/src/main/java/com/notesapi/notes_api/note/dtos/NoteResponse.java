@@ -10,7 +10,8 @@ public record NoteResponse(
         String title,
         String content,
         boolean completed,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
     public static NoteResponse fromEntity(Note note) {
         return new NoteResponse(
@@ -18,7 +19,8 @@ public record NoteResponse(
                 note.getTitle(),
                 note.getContent(),
                 note.isCompleted(),
-                note.getCreatedAt()
+                note.getCreatedAt(),
+                note.getUpdatedAt()
         );
     }
 }
