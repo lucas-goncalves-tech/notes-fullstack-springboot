@@ -77,7 +77,7 @@ public class NoteControllerTest {
             testNoteHelper.createNote(user);
 
             mockMvc.perform(get(notesUrl)
-                    .with(user(user)))
+                            .with(user(user)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray())
                     .andExpect(jsonPath("$.content", hasSize(3)))
@@ -97,8 +97,8 @@ public class NoteControllerTest {
             }
 
             mockMvc.perform(get(notesUrl)
-                    .queryParams(pageParams(1, 5))
-                    .with(user(user)))
+                            .queryParams(pageParams(1, 5))
+                            .with(user(user)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray())
                     .andExpect(jsonPath("$.content", hasSize(5)))
@@ -120,8 +120,8 @@ public class NoteControllerTest {
             testNoteHelper.title(title).createNote(user);
 
             mockMvc.perform(get(notesUrl)
-                    .queryParam("title", title)
-                    .with(user(user)))
+                            .queryParam("title", title)
+                            .with(user(user)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray())
                     .andExpect(jsonPath("$.content", hasSize(1)))
@@ -140,8 +140,8 @@ public class NoteControllerTest {
             testNoteHelper.createNote(user);
 
             mockMvc.perform(get(notesUrl)
-                    .queryParams(pageParams(99, 10))
-                    .with(user(user)))
+                            .queryParams(pageParams(99, 10))
+                            .with(user(user)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray())
                     .andExpect(jsonPath("$.content", hasSize(0)))
@@ -155,12 +155,36 @@ public class NoteControllerTest {
             testNoteHelper.createNote(user);
 
             mockMvc.perform(get(notesUrl)
-                    .queryParam("title", "this title does not exist")
-                    .with(user(user)))
+                            .queryParam("title", "this title does not exist")
+                            .with(user(user)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content").isArray())
                     .andExpect(jsonPath("$.content", hasSize(0)))
                     .andExpect(jsonPath("$.totalElements").value(0));
+        }
+
+        @Test
+        @DisplayName("Should normalize page to 0 when page is negative")
+        void shouldNormalizePage_WhenPageIsNegative() throws Exception {
+            User user = testUserHelper.createUser();
+
+            mockMvc.perform(get(notesUrl)
+                            .queryParams(pageParams(-1, 10))
+                            .with(user(user)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.page").value(0));
+        }
+
+        @Test
+        @DisplayName("Should normalize size to default when size is 0")
+        void shouldNormalizeSize_WhenSizeIs0() throws Exception {
+            User user = testUserHelper.createUser();
+
+            mockMvc.perform(get(notesUrl)
+                            .queryParams(pageParams(0, 0))
+                            .with(user(user)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.size").value(10));
         }
 
         @Test
