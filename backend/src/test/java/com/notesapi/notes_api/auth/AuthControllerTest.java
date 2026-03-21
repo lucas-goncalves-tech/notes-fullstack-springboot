@@ -40,6 +40,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("integration")
+@DisplayName("Integration tests - Auth")
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -70,8 +71,8 @@ public class AuthControllerTest {
     private String jwtSecret;
 
     @Nested
-    @DisplayName("Endpoint: /auth/register")
-    class RegisterEndpoint {
+    @DisplayName("Post: /auth/register")
+    class PostRegister {
 
         final static String registerUrl = "/auth/register";
 
@@ -132,8 +133,8 @@ public class AuthControllerTest {
     }
 
     @Nested
-    @DisplayName("Endpoint: /auth/login")
-    class LoginEndpoint {
+    @DisplayName("POST: /auth/login")
+    class PostLogin {
 
         final static String loginUrl = "/auth/login";
 
@@ -191,8 +192,8 @@ public class AuthControllerTest {
     }
 
     @Nested
-    @DisplayName("Endpoint: /auth/refresh")
-    class RefreshMethod {
+    @DisplayName("POST: /auth/refresh")
+    class PostRefresh {
 
         final static String refreshUrl = "/auth/refresh";
 
@@ -272,8 +273,8 @@ public class AuthControllerTest {
     }
 
     @Nested
-    @DisplayName("Endpoint: /auth/logout")
-    class LogoutMethod {
+    @DisplayName("POST: /auth/logout")
+    class PostLogout {
         final static String logoutUrl = "/auth/logout";
 
         @Test
