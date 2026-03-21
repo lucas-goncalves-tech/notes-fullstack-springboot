@@ -1,10 +1,12 @@
-package com.notesapi.notes_api;
+package com.notesapi.notes_api.helpers;
 
 import com.notesapi.notes_api.user.UserRepository;
 import com.notesapi.notes_api.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class TestUserHelper {
     private String email = "test@test.com";
