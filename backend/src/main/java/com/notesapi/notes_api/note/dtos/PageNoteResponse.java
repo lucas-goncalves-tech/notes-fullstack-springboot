@@ -10,7 +10,7 @@ public record PageNoteResponse(
         int size,
         Long totalElements,
         int totalPages,
-        boolean last
+        boolean isLast
 ) {
     public static PageNoteResponse fromPageable(Page<NoteResponse> notePage) {
         return new PageNoteResponse(
