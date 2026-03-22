@@ -47,24 +47,24 @@ public class NoteController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Atuliza uma nota")
-    public ResponseEntity<UpdateNoteResponse> update(@PathVariable UUID id,
+    public ResponseEntity<UpdateNoteResponse> update(@PathVariable("id") UUID noteId,
                                                      @Valid @RequestBody UpdateNoteRequest request,
                                                      @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(noteService.update(id, request, user));
+        return ResponseEntity.ok(noteService.update(noteId, request, user));
     }
 
     @PatchMapping("/{id}/toggle")
     @Operation(summary = "Define a nota como completada ou não completada")
-    public ResponseEntity<ToggleCompletedResponse> toggleCompleted(@PathVariable UUID id,
+    public ResponseEntity<ToggleCompletedResponse> toggleCompleted(@PathVariable("id") UUID noteId,
                                                                    @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(noteService.toggleCompleted(id, user));
+        return ResponseEntity.ok(noteService.toggleCompleted(noteId, user));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta uma nota permanentemente")
-    public ResponseEntity<Void> delete(@PathVariable("id") UUID id,
+    public ResponseEntity<Void> delete(@PathVariable("id") UUID noteId,
                                        @AuthenticationPrincipal User user) {
-        noteService.delete(id, user);
+        noteService.delete(noteId, user);
         return ResponseEntity.noContent().build();
     }
 }
