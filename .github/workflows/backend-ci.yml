@@ -17,7 +17,6 @@ jobs:
       env:
         SPRING_PROFILES_ACTIVE: test
         TESTCONTAINERS_RYUK_DISABLED: 'true'
-        TESTCONTAINERS_HOST_OVERRIDE: 'host.docker.internal'
         DB_USERNAME: postgres
         DB_PASSWORD: postgres
         DB_HOST: localhost
