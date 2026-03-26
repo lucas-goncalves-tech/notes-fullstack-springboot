@@ -92,9 +92,9 @@ public class NoteServiceTest {
             String content = "new content description";
             CreateNoteRequest request = new CreateNoteRequest(title, content);
             User mockUser = User.builder().id(UUID.randomUUID()).email("test@test.com").build();
-            Note newNote = Note.builder().title(request.title()).content(request.content()).user(mockUser).build();
+            Note newNote = Note.builder().id(UUID.randomUUID()).title(request.title()).content(request.content()).user(mockUser).build();
 
-            when(noteRepository.save(any(Note.class))).thenReturn(newNote);
+            when(noteRepository.saveAndFlush(any(Note.class))).thenReturn(newNote);
 
             CreateNoteResponse response = noteService.create(request, mockUser);
 
@@ -104,7 +104,7 @@ public class NoteServiceTest {
             assertEquals(content, response.data().content());
 
             var captor = ArgumentCaptor.forClass(Note.class);
-            verify(noteRepository).save(captor.capture());
+            verify(noteRepository).saveAndFlush(captor.capture());
 
             var capturedNote = captor.getValue();
             assertEquals(mockUser, capturedNote.getUser());
