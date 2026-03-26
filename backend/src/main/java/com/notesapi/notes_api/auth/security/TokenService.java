@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
@@ -41,7 +39,7 @@ public class TokenService {
     }
 
     private Instant getNowInTimestamp() {
-        return LocalDateTime.now().toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now();
     }
 
     private Instant generateExpiresAt(TokenType type) {
