@@ -24,10 +24,10 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration.in.minutes:10}")
+    @Value("${jwt.expiration.in.minutes}")
     private int JWT_EXPIRATION_IN_MINUTES;
 
-    @Value("${jwt.refresh.expiration.in.days:7}")
+    @Value("${jwt.refresh.expiration.in.days}")
     private int JWT_REFRESH_EXPIRATION_IN_DAYS;
 
     private static final String ISSUER = "notes-api";

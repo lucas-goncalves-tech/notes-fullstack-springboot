@@ -16,15 +16,11 @@ jobs:
       
       env:
         SPRING_PROFILES_ACTIVE: test
-        REDIS_HOST: localhost
-        REDIS_PORT: 6379
         DB_USERNAME: postgres
         DB_PASSWORD: postgres
         DB_HOST: localhost
         DB_PORT: 5432
         JWT_SECRET: much-longer-secret-with-32-characteres-for-secure
-        JWT_EXPIRATION_IN_MINUTES: 10
-        JWT_REFRESH_EXPIRATION_IN_DAYS: 7
         CORS_ALLOWED_ORIGINS: "*"
       
       steps:

@@ -32,7 +32,7 @@ public class SpringSecurity {
     private final SecurityFilter securityFilter;
     private final CustomAuthEntryPoint customAuthEntryPoint;
 
-    @Value("${cors.allowed-origins:http://localhost:3000}")
+    @Value("${cors.allowed-origins}")
     private List<String> allowedOrigins;
 
     @Bean

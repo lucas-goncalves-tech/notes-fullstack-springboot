@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Auth")
 public class AuthController {
 
-    @Value("${spring.profiles.active:dev}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
     private final UserService userService;
