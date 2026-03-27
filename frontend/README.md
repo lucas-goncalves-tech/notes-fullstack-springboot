@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NoteMaster - Frontend UI
 
-## Getting Started
+A interface moderna e interativa de gerenciamento de notas construída com Next.js v15 e Tailwind v4.
 
-First, run the development server:
+## 🚀 Quick Start
 
+**1. Configuração de Dependências**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. Variáveis de Ambiente**
+Crie um arquivo `.env` a partir do modelo local e preencha a Base API.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080/api/v1
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**3. Iniciando Ambiente de Desenvolvimento**
+```bash
+npm run dev
+# Turbopack habilitado; servidor disponível em http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Arquitetura & Features
 
-## Learn More
+- **App Router (React Server Components):** Usa Server Actions nas estruturas de componentes, mesclando eficientemente com bibliotecas hidratadas (`"use client"`).
+- **Gerenciamento de Cache via React Query:** Mutação e Fetch do DB lidam com dados assíncronos suavemente, desabilitando o "loading" falso de UX.
+- **Proxy Patterns em Rotas Auth:** Contorna a limitação clássica de cookies _HttpOnly_ de domínios diferentes. Exatamente o Refresh e Login são intermediados na pasta `app/api/auth/[...]`.
+- **Acessibilidade Shadcn:** Componentes headless (`Radix UI`) com tipagem reforçada e personalizações nativas.
+- **Modos Claro/Escuro Embutido:** Suportado com `next-themes`, mudando classes diretamente em estado. 
 
-To learn more about Next.js, take a look at the following resources:
+## ⚙️ Core Scripts Disponíveis
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Comando | Descrição |
+|----------|-------------|
+| `npm run dev` | Inicia para desenvolvimento ágil utilizando `--turbopack`. |
+| `npm run lint` | Escaneia por defeitos usando ESLint (Next e Typescript rules). |
+| `npx tsc --noEmit` | Examina falhas silenciosas de tipagem em todo projeto. |
+| `npm run build` | Produz o bundle de Deploy Final. |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📚 Estrutura de Diretórios 
 
-## Deploy on Vercel
+```markdown
+frontend/
+├── src/
+│   ├── app/                    # Next.js App Router raiz e API proxy routes
+│   │   ├── (protected)/        # Rotas em layout trancadas pelo sistema auth
+│   │   └── api/auth/           # Rotas Bff para gerenciamento do cookie HttpOnly
+│   ├── components/
+│   │   └── ui/                 # Componentes genéricos providos via Shadcn
+│   ├── lib/                    # Helpers, Cn e utilitários da instânica global de Axios 
+│   ├── modules/                # Recursos de alto nível separados por Feature (Auth / Notes)
+│   └── providers/              # Componentes de provedor HOC (Temas e Sessões Query/Auth)
+└── components.json             # Root Config das classes Shadcn.
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠 Design Adicional e Contribuição
+Se você deseja adicionar um novo formulário ou card à biblioteca, gere utilizando o CLI do shadcn previamente. Exemplo: `npx shadcn@latest add dialog`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Use as variáveis semânticas do Tailwind do `globals.css` (ex. `bg-background`, `text-foreground`, `bg-primary`, `border-border`) ao invés das cores padronizadas em Slate para assegurar compatibilidade absoluta com o Tema!
+
+## 📄 License
+Totalmente Open Source sob GPL-3.0 License.
