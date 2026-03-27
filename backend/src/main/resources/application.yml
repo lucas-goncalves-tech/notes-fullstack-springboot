@@ -26,6 +26,8 @@ spring:
 server:
   shutdown: graceful
   forward-headers-strategy: framework
+  servlet:
+    context-path: /api/v1
 
 jwt:
   secret: ${JWT_SECRET}
